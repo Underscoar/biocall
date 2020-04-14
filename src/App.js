@@ -6,7 +6,11 @@ import JitsiContainer from './JitsiContainer';
 function App() {
   return (
     <div className="App">
-      <JitsiContainer />
+      <div className="jitsi-window">
+        <div class="jitsi-wrap border-green">
+          <JitsiContainer />
+        </div>
+      </div>
     </div>
   );
 }
