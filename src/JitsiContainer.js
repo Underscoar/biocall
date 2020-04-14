@@ -5,8 +5,9 @@ import './JitsiContainer.css';
 function JitsiContainer() {
   return (
     <div className="JitsiContainer">
-      <Iframe url="http://i342465.hera.fhict.nl/jitsi-meet-link"
-              className="jitsi-iframe-wrap" />
+      <Iframe url="https://i342465.hera.fhict.nl/jitsi-meet-link"
+              className="jitsi-iframe-wrap"
+              allow="camera; microphone" />
     </div>
   );
 }
