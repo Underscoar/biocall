@@ -10,8 +10,8 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "https://6b8897dc.ngrok.io",
-      // endpoint: "http://127.0.0.1:4001",
+      endpoint: "http://127.0.0.1:4001",
+      // endpoint: "https://dcd202f7.ngrok.io",
       borderStyle: {
         // boxShadow: `0 0 20px 5px rgba(90, 255, 52, 0.75)`
         boxShadow: `0 0 20px 5px rgba(0, 0, 255, 0.75)`
@@ -33,6 +33,8 @@ class App extends Component {
     this.socket.on("spoofBorder", data => this.setBorderSpoofing(data));
     this.socket.on("spoofValue", data => this.spoofValue(data));
     this.socket.on("faceReaderData", data => this.processFaceReaderData(data));
+
+    this.socket.on('testdata', data => {console.log(data);});
   }
 
   processESenseDate(data) {
