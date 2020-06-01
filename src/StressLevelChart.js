@@ -1,12 +1,16 @@
 import React from 'react';
-import './StressLevelChart.css';
+import './Charts.css';
 
 var Chart = require('chart.js');
 
 class StressLevelChart extends React.Component {
   componentDidMount(props) {
-    this.ctx = document.getElementById('stress-level-chart');
-    console.log(this.ctx);
+    this.ctx = document.getElementById('stress-level-chart').getContext('2d');
+    // let gradient = 'rgba(116,0,255,0.2)';
+    let gradient = this.ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(116,0,255,0.8)');
+    gradient.addColorStop(1, 'rgba(116,0,255,0)');
+    // console.log(this.ctx);
     this.gsrData = [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1];
     this.config = {
       type: 'line',
@@ -15,10 +19,13 @@ class StressLevelChart extends React.Component {
 				datasets: [{
 					label: 'Stress level',
 					fill: true,
-					backgroundColor: 'rgba(255,0,0,0.2)',
-					borderColor: 'rgba(255,0,0,1)',
+					// backgroundColor: 'rgba(255,0,0,0.2)',
+					// borderColor: 'rgba(255,0,0,1)',
+          // backgroundColor: 'rgba(116,0,255,0.2)',
+          backgroundColor: gradient,
+					borderColor: 'rgba(116,0,255,1)',
 					data: this.gsrData,
-          radius: 0
+          radius: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 				}]
 			},
 			options: {
@@ -39,7 +46,7 @@ class StressLevelChart extends React.Component {
 						display: false
 					}],
 					yAxes: [{
-						display: true,
+						display: false,
             ticks: {
               min: 0,
               max: 5
@@ -53,13 +60,25 @@ class StressLevelChart extends React.Component {
   }
 
   updateChart(bioData) {
-    // console.log(bioData);
     if (this.stressChart !== undefined) {
+      let maxChartVal = bioData.gsrHistory.maxVal+0.5;
+      this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       // this.stressChart.data.datasets[0].data.push(Math.floor(Math.random() * 6));
       this.stressChart.data.datasets[0].data.push(bioData.gsr);
-      this.stressChart.data.datasets[0].data.shift();
+      if (bioData.gsr < 4) {
+        this.stressChart.data.datasets[0].radius.push(0);
+      }
+      else {
+        this.stressChart.data.datasets[0].radius.push(5);
+      }
+      this.stressChart.data.labels.push('');
+      if (this.stressChart.data.datasets[0].data.length > 100) {
+        this.stressChart.data.datasets[0].data.shift();
+        this.stressChart.data.labels.shift();
+        this.stressChart.data.datasets[0].radius.shift();
+      }
       this.stressChart.update();
-      console.log(this.stressChart.data.datasets[0].data);
+      // console.log(this.stressChart.data.datasets[0].data);
     }
   }
 
@@ -67,7 +86,7 @@ class StressLevelChart extends React.Component {
     this.updateChart(this.props.bioData);
     return (
       <div className="StressLevelChart">
-      <canvas id="stress-level-chart" width="300" height="400"></canvas>
+      <canvas id="stress-level-chart" width="200" height="300"></canvas>
       </div>
     );
   }

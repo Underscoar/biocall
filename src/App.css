@@ -7,7 +7,7 @@
 }
 
 .App button, .App input {
-  display: none;
+  /* display: none; */
 }
 
 .jitsi-window {
@@ -35,7 +35,7 @@
 }
 
 .border-green {
-  box-shadow: 0 0 20px 5px rgba(90, 255, 52, 0.75);
+  box-shadow: 0 0 50px 5px rgba(90, 255, 52, 0.75);
 }
 
 .change-size-wrap {
@@ -47,6 +47,7 @@
   background-image: linear-gradient(to top right, rgba(0,0,0,0.7), rgba(0,0,0,0.3), rgba(0,0,0,0.1), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
   box-sizing: border-box;
   padding: 10px;
+  /* display: none; */
 }
 
 .change-size-btn {
@@ -57,9 +58,27 @@
   cursor: pointer;
 }
 
+.change-size-btn svg {
+  transition: 0.3s;
+  transform: rotateZ(45deg);
+}
+
+.jitsi-resized .change-size-btn svg {
+  transform: rotateZ(-135deg);
+}
+
 .chart-contain {
-  width: 370px;
-  height: 400px;
+  width: 270px;
+  height: 300px;
+  transition: 0.5s;
+  /* transition-delay: 0.5s; */
+}
+
+.chart-contain-hidden {
+  width: 50px;
+  height: 130px;
+  transition: 0;
+  transition-delay: 0;
 }
 
 .stress-level-chart-contain {
@@ -68,9 +87,15 @@
   overflow: hidden;
 }
 
+.heart-rate-chart-contain {
+  position: absolute;
+  top: 500px;
+  overflow: hidden;
+}
+
 .chart-wrap {
-  width: 350px;
-  height: 400px;
+  width: 200px;
+  height: 300px;
   display: flex;
 }
 
@@ -80,8 +105,14 @@
   transition-timing-function: cubic-bezier(0,.6,0,.99);
 }
 
+.heart-rate-chart-wrap {
+  margin-left: 20px;
+  transition: 0.5s;
+  transition-timing-function: cubic-bezier(0,.6,0,.99);
+}
+
 .chart-hidden {
-  transform: translateX(calc(-100% + 30px));
+  transform: translateX(calc(-100% - 20px));
 }
 
 .chart-hidden .StressLevelChart {

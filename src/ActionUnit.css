@@ -1,0 +1,57 @@
+.action-units-wrap {
+  position: absolute;
+  width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ActionUnit {
+  width: 150px;
+  background: rgba(255,255,255,0.5);
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 10px 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.action-unit-4 {
+  /* background: rgba(150, 255, 150, 0.5); */
+  animation-name: actionUnit4;
+  animation-duration: 2s;
+}
+
+@keyframes actionUnit4 {
+  from {background: rgba(150, 255, 150, 0.5);}
+  to {background: rgba(255,255,255,0.5);}
+}
+
+.action-unit-23 {
+  /* background: rgba(150, 186, 255, 0.5); */
+  animation-name: actionUnit23;
+  animation-duration: 2s;
+}
+
+@keyframes actionUnit23 {
+  from {background: rgba(150, 186, 255, 0.5);}
+  to {background: rgba(255,255,255,0.5);}
+}
+
+.action-unit-24 {
+  /* background: rgba(149, 45, 187, 0.5); */
+  animation-name: actionUnit24;
+  animation-duration: 2s;
+}
+
+@keyframes actionUnit24 {
+  from {background: rgba(149, 45, 187, 0.5);}
+  to {background: rgba(255,255,255,0.5);}
+}
