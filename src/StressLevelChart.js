@@ -65,12 +65,7 @@ class StressLevelChart extends React.Component {
       this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       // this.stressChart.data.datasets[0].data.push(Math.floor(Math.random() * 6));
       this.stressChart.data.datasets[0].data.push(bioData.gsr);
-      if (bioData.gsr < 4) {
         this.stressChart.data.datasets[0].radius.push(0);
-      }
-      else {
-        this.stressChart.data.datasets[0].radius.push(5);
-      }
       this.stressChart.data.labels.push('');
       if (this.stressChart.data.datasets[0].data.length > 100) {
         this.stressChart.data.datasets[0].data.shift();

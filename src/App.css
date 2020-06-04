@@ -47,7 +47,7 @@
   background-image: linear-gradient(to top right, rgba(0,0,0,0.7), rgba(0,0,0,0.3), rgba(0,0,0,0.1), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
   box-sizing: border-box;
   padding: 10px;
-  /* display: none; */
+  display: none;
 }
 
 .change-size-btn {
@@ -76,7 +76,7 @@
 
 .chart-contain-hidden {
   width: 50px;
-  height: 130px;
+  height: 135px;
   transition: 0;
   transition-delay: 0;
 }
@@ -89,7 +89,7 @@
 
 .heart-rate-chart-contain {
   position: absolute;
-  top: 500px;
+  top: 400px;
   overflow: hidden;
 }
 
@@ -122,15 +122,17 @@
 }
 
 .chart-toggle-button {
-  writing-mode: sideways-lr;
-  text-align: right;
+  writing-mode: vertical-rl;
+  text-align: center;
   font-size: 20px;
+  height: 135px;
   color: #fff;
   background: rgba(255,255,255,0.5);
   display: inline-table;
   box-sizing: border-box;
   padding: 10px;
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px 0 0 10px;
   cursor: pointer;
   user-select: none;
+  transform: rotate(180deg);
 }

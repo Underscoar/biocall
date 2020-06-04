@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import JitsiContainer from './JitsiContainer';
 import StressLevelChart from './StressLevelChart';
-import HeartRateChart from './HeartRateChart';
+import HeartRateVarChart from './HeartRateVarChart';
 import ActionUnit from './ActionUnit';
 import './App.css';
 
@@ -16,10 +16,11 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "http://127.0.0.1:4001",
-      // endpoint: "https://d14f756054fa.ngrok.io",
-      bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReader: {
+      endpoint: "http://192.168.0.166:4001",
+      // endpoint: "https://5c6d635562a0.ngrok.io",
+      bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
+        "Heart Rate Var": 0.180,
         "Neutral": 0,
         "Happy": 0,
         "Sad": 0,
@@ -41,7 +42,8 @@ class App extends Component {
       spoofBorder: false,
       spoofValue: 0,
       spoofGSR: false,
-      spoofedGSRVal: 1
+      spoofedGSRVal: 1,
+      actionUnitsWrapClass: false
     }
 
     this.processBioData = this.processBioData.bind(this);
@@ -55,6 +57,12 @@ class App extends Component {
 
     this.spoofGSR = this.spoofGSR.bind(this);
     this.changeGSR = this.changeGSR.bind(this);
+
+    this.sendActionUnitsWrapReq = this.sendActionUnitsWrapReq.bind(this);
+    this.spoof4 = this.spoof4.bind(this);
+    this.spoof23 = this.spoof23.bind(this);
+    this.spoof24 = this.spoof24.bind(this);
+    this.spoofActionUnit = this.spoofActionUnit.bind(this);
   }
 
   componentDidMount() {
@@ -76,7 +84,9 @@ class App extends Component {
     this.socket.on("spoofValue", data => this.spoofValue(data));
     this.socket.on("faceReaderData", data => this.processFaceReaderData(data));
 
+    this.socket.on('spoofActionUnit', data => this.spoofActionUnit(data));
     this.socket.on('testdata', data => {console.log(data);});
+    this.socket.on('setActionUnitsWrap', data =>{this.setState({actionUnitsWrapClass: data});});
   }
 
   processBioData(data) {
@@ -181,6 +191,30 @@ class App extends Component {
     this.setState({shovedHRChart: !shovedHRChartVal});
   }
 
+  sendActionUnitsWrapReq() {
+    let toggle = !this.state.actionUnitsWrapClass;
+    this.socket.emit('setActionUnitsWrap', toggle);
+  }
+
+  spoof4() {
+    this.socket.emit('spoofActionUnit', '4');
+  }
+
+  spoof23() {
+    this.socket.emit('spoofActionUnit', '23');
+  }
+
+  spoof24() {
+    this.socket.emit('spoofActionUnit', '24');
+  }
+
+  spoofActionUnit(val) {
+    document.getElementById('action-unit-' + val).classList.add('action-unit-' + val + '-border');
+    setTimeout(function() {
+      document.getElementById('action-unit-' + val).classList.remove('action-unit-' + val + '-border');
+    },1000);
+  }
+
   render() {
     let resizedWindow = this.state.resizedWindow ? 'jitsi-wrap jitsi-resized' : 'jitsi-wrap';
     let shovedStressChart = this.state.shovedStressChart ? 'chart-wrap stress-level-chart-wrap' : 'chart-wrap stress-level-chart-wrap chart-hidden';
@@ -188,6 +222,8 @@ class App extends Component {
 
     let shovedHRChart = this.state.shovedHRChart ? 'chart-wrap heart-rate-chart-wrap' : 'chart-wrap heart-rate-chart-wrap chart-hidden';
     let shovedHRChartContain = this.state.shovedHRChart ? 'chart-contain heart-rate-chart-contain' : 'chart-contain heart-rate-chart-contain chart-contain-hidden';
+
+    let actionUnitsWrapClass = this.state.actionUnitsWrapClass ? 'action-units-wrap action-units-wrap-visible' : 'action-units-wrap';
     return (
       <div className="App">
       {/*<button onClick={this.connectToFaceReader}>Connect to Facereader</button>
@@ -195,6 +231,10 @@ class App extends Component {
       <input type="range" value={this.state.spoofValue} min="0" max="255" onChange={this.changeSpoof} />*/}
       <button onClick={this.spoofGSR}>Spoof GSR</button>
       <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
+      <button onClick={this.sendActionUnitsWrapReq}>Display action units</button>
+      <button onClick={this.spoof4}>Spoof 4</button>
+      <button onClick={this.spoof23}>Spoof 23</button>
+      <button onClick={this.spoof24}>Spoof 24</button>
         <div className="jitsi-window">
           <div style={this.state.borderStyle} className={resizedWindow}>
             <JitsiContainer />
@@ -209,15 +249,17 @@ class App extends Component {
             </div>
           </div>
 
-          <div className="action-units-wrap">
-            <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
-            <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
-            <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
+          <div className={actionUnitsWrapClass}>
+            <div className="all-action-units">
+              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
+              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
+              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
+            </div>
           </div>
 
           <div className={shovedHRChartContain}>
             <div className={shovedHRChart}>
-              <HeartRateChart bioData={this.state.bioData} />
+              <HeartRateVarChart bioData={this.state.bioData} />
               <div className="chart-toggle-button" onClick={this.toggleShovedHRChart}>Heart rate</div>
             </div>
           </div>

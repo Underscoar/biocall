@@ -1,32 +1,60 @@
 .action-units-wrap {
   position: absolute;
-  width: 500px;
+  width: 450px;
   left: 50%;
   transform: translateX(-50%);
   top: 50px;
   overflow: hidden;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  background: rgba(255,255,255,0.5);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-sizing: border-box;
+  padding: 15px;
+  display: none;
+}
+
+.action-units-wrap-visible {
+  display: flex;
+}
+
+.all-action-units {
+  display: flex;
+  border-bottom: 2px solid #919191;
+  height: 35px;
 }
 
 .ActionUnit {
-  width: 150px;
-  background: rgba(255,255,255,0.5);
-  color: #fff;
-  font-size: 16px;
+  width: 120px;
+  color: #919191;
+  font-size: 10px;
   text-align: center;
   box-sizing: border-box;
-  padding: 10px 0;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  padding: 0;
+  line-height: 30px;
   transition: 0.3s;
   font-weight: bold;
+  font-family: 'Helvetica', 'Segoe UI';
+  text-transform: uppercase;
 }
 
 .action-unit-4 {
   /* background: rgba(150, 255, 150, 0.5); */
   animation-name: actionUnit4;
   animation-duration: 2s;
+}
+
+.action-unit-4-border {
+  border-bottom: 10px solid rgba(150,255,150,0.5);
+}
+
+.action-unit-23-border {
+  border-bottom: 10px solid rgba(150,186,255,0.5);
+}
+
+.action-unit-24-border {
+  border-bottom: 10px solid rgba(150,45,178,0.5);
 }
 
 @keyframes actionUnit4 {

@@ -20,7 +20,7 @@ class ActionUnit extends React.Component {
       actionUnitClassName = 'ActionUnit ' + this.actionUnitSettings.actionClass;
     }
     return (
-      <div className={actionUnitClassName}>
+      <div id={this.props.actionClass} className={actionUnitClassName}>
         {this.props.actionName}
       </div>
     );
