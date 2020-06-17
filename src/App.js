@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import JitsiContainer from './JitsiContainer';
 import StressLevelChart from './StressLevelChart';
-import HeartRateVarChart from './HeartRateVarChart';
+import HeartRateChart from './HeartRateChart';
 import ActionUnit from './ActionUnit';
 import './App.css';
 
@@ -16,8 +16,8 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "http://192.168.0.166:4001",
-      // endpoint: "https://5c6d635562a0.ngrok.io",
+      // endpoint: "https://ad0f3d9c6160.eu.ngrok.io",
+      endpoint: "http://127.0.0.1:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
         "Heart Rate Var": 0.180,
@@ -34,7 +34,7 @@ class App extends Component {
       }},
       borderStyle: {
         // boxShadow: `0 0 20px 5px rgba(90, 255, 52, 0.75)`
-        boxShadow: `0 0 20px 5px rgba(0, 0, 255, 0.75)`
+        boxShadow: `0 0 40px 5px rgba(0, 0, 255, 0.75)`
       },
       resizedWindow: false,
       shovedStressChart: false,
@@ -220,6 +220,8 @@ class App extends Component {
     let shovedStressChart = this.state.shovedStressChart ? 'chart-wrap stress-level-chart-wrap' : 'chart-wrap stress-level-chart-wrap chart-hidden';
     let shovedStressChartContain = this.state.shovedStressChart ? 'chart-contain stress-level-chart-contain' : 'chart-contain stress-level-chart-contain chart-contain-hidden';
 
+    let resizedWindowCharts = this.state.resizedWindow ? 'charts-contain charts-side' : 'charts-contain';
+
     let shovedHRChart = this.state.shovedHRChart ? 'chart-wrap heart-rate-chart-wrap' : 'chart-wrap heart-rate-chart-wrap chart-hidden';
     let shovedHRChartContain = this.state.shovedHRChart ? 'chart-contain heart-rate-chart-contain' : 'chart-contain heart-rate-chart-contain chart-contain-hidden';
 
@@ -242,12 +244,6 @@ class App extends Component {
               <span onClick={this.toggleWindowSize} className="change-size-btn"><FontAwesomeIcon icon={faChevronUp} /></span>
             </div>
           </div>
-          <div className={shovedStressChartContain}>
-            <div className={shovedStressChart}>
-              <StressLevelChart bioData={this.state.bioData}/>
-              <div className="chart-toggle-button" onClick={this.toggleShovedStressChart}>Stress level</div>
-            </div>
-          </div>
 
           <div className={actionUnitsWrapClass}>
             <div className="all-action-units">
@@ -257,10 +253,19 @@ class App extends Component {
             </div>
           </div>
 
-          <div className={shovedHRChartContain}>
-            <div className={shovedHRChart}>
-              <HeartRateVarChart bioData={this.state.bioData} />
-              <div className="chart-toggle-button" onClick={this.toggleShovedHRChart}>Heart rate</div>
+          <div className={resizedWindowCharts}>
+            <div className={shovedStressChartContain}>
+              <div className={shovedStressChart}>
+                <StressLevelChart bioData={this.state.bioData}/>
+                <div className="chart-toggle-button" onClick={this.toggleShovedStressChart}>Stress level</div>
+              </div>
+            </div>
+
+            <div className={shovedHRChartContain}>
+              <div className={shovedHRChart}>
+                <HeartRateChart bioData={this.state.bioData} />
+                <div className="chart-toggle-button" onClick={this.toggleShovedHRChart}>Heart rate</div>
+              </div>
             </div>
           </div>
         </div>

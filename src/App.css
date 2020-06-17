@@ -4,6 +4,7 @@
   width: 100%;
   height: 100vh;
   font-family: 'Poppins';
+  background: #f3f2f7;
 }
 
 .App button, .App input {
@@ -17,6 +18,8 @@
   padding: 50px;
   box-sizing: border-box;
   position: relative;
+  max-width: 2000px;
+  max-height: 1000px;
 }
 
 .jitsi-wrap {
@@ -31,7 +34,7 @@
 }
 
 .jitsi-resized {
-  transform: scale(0.5);
+  transform: scale(0.6);
 }
 
 .border-green {
@@ -47,7 +50,8 @@
   background-image: linear-gradient(to top right, rgba(0,0,0,0.7), rgba(0,0,0,0.3), rgba(0,0,0,0.1), rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
   box-sizing: border-box;
   padding: 10px;
-  display: none;
+  z-index: 10;
+  /* display: none; */
 }
 
 .change-size-btn {
@@ -65,74 +69,4 @@
 
 .jitsi-resized .change-size-btn svg {
   transform: rotateZ(-135deg);
-}
-
-.chart-contain {
-  width: 270px;
-  height: 300px;
-  transition: 0.5s;
-  /* transition-delay: 0.5s; */
-}
-
-.chart-contain-hidden {
-  width: 50px;
-  height: 135px;
-  transition: 0;
-  transition-delay: 0;
-}
-
-.stress-level-chart-contain {
-  position: absolute;
-  top: 75px;
-  overflow: hidden;
-}
-
-.heart-rate-chart-contain {
-  position: absolute;
-  top: 400px;
-  overflow: hidden;
-}
-
-.chart-wrap {
-  width: 200px;
-  height: 300px;
-  display: flex;
-}
-
-.stress-level-chart-wrap {
-  margin-left: 20px;
-  transition: 0.5s;
-  transition-timing-function: cubic-bezier(0,.6,0,.99);
-}
-
-.heart-rate-chart-wrap {
-  margin-left: 20px;
-  transition: 0.5s;
-  transition-timing-function: cubic-bezier(0,.6,0,.99);
-}
-
-.chart-hidden {
-  transform: translateX(calc(-100% - 20px));
-}
-
-.chart-hidden .StressLevelChart {
-  /* transition: opacity 0.1s;
-  transition-delay: 0.1s;
-  opacity: 0; */
-}
-
-.chart-toggle-button {
-  writing-mode: vertical-rl;
-  text-align: center;
-  font-size: 20px;
-  height: 135px;
-  color: #fff;
-  background: rgba(255,255,255,0.5);
-  display: inline-table;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 10px 0 0 10px;
-  cursor: pointer;
-  user-select: none;
-  transform: rotate(180deg);
 }
