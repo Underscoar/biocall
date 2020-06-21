@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import JitsiContainer from './JitsiContainer';
 import StressLevelChart from './StressLevelChart';
 import HeartRateChart from './HeartRateChart';
+import ClientView from './ClientView';
 import ActionUnit from './ActionUnit';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 import './App.css';
 
 // import { library } from '@fortawesome/fontawesome-svg-core';
@@ -17,7 +23,7 @@ class App extends Component {
     this.state = {
       response: false,
       // endpoint: "https://ad0f3d9c6160.eu.ngrok.io",
-      endpoint: "http://127.0.0.1:4001",
+      endpoint: "http://192.168.0.166:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
         "Heart Rate Var": 0.180,
@@ -36,9 +42,13 @@ class App extends Component {
         // boxShadow: `0 0 20px 5px rgba(90, 255, 52, 0.75)`
         boxShadow: `0 0 40px 5px rgba(0, 0, 255, 0.75)`
       },
+      showToClientBorder: false,
+      showToClientStressChart: false,
+      showToClientHRChart: false,
       resizedWindow: false,
       shovedStressChart: false,
       shovedHRChart: false,
+      displaySpoofMenu: false,
       spoofBorder: false,
       spoofValue: 0,
       spoofGSR: false,
@@ -62,7 +72,13 @@ class App extends Component {
     this.spoof4 = this.spoof4.bind(this);
     this.spoof23 = this.spoof23.bind(this);
     this.spoof24 = this.spoof24.bind(this);
+
     this.spoofActionUnit = this.spoofActionUnit.bind(this);
+
+    this.showToClientBorder = this.showToClientBorder.bind(this);
+    this.showToClientStress = this.showToClientStress.bind(this);
+    this.showToClientHR = this.showToClientHR.bind(this);
+
   }
 
   componentDidMount() {
@@ -74,8 +90,18 @@ class App extends Component {
 
     this.socket.on('connect', () => {
         this.socket.emit('roomRequest', room);
-
       });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.key === 'q') {
+        if (!this.state.displaySpoofMenu) {
+          this.setState({displaySpoofMenu: true});
+        }
+        else {
+          this.setState({displaySpoofMenu: false});
+        }
+      }
+    });
 
     this.socket.on('bioData', data => this.processBioData(data));
 
@@ -87,6 +113,10 @@ class App extends Component {
     this.socket.on('spoofActionUnit', data => this.spoofActionUnit(data));
     this.socket.on('testdata', data => {console.log(data);});
     this.socket.on('setActionUnitsWrap', data =>{this.setState({actionUnitsWrapClass: data});});
+
+    this.socket.on('showToClientBorder', data => {this.setState({showToClientBorder: data});});
+    this.socket.on('showToClientStress', data => {this.setState({showToClientStressChart: data});});
+    this.socket.on('showToClientHR', data => {this.setState({showToClientHRChart: data});});
   }
 
   processBioData(data) {
@@ -208,6 +238,18 @@ class App extends Component {
     this.socket.emit('spoofActionUnit', '24');
   }
 
+  showToClientBorder(event) {
+    this.socket.emit('showToClientBorder', event.target.checked);
+  }
+
+  showToClientStress(event) {
+    this.socket.emit('showToClientStress', event.target.checked);
+  }
+
+  showToClientHR(event) {
+    this.socket.emit('showToClientHR', event.target.checked);
+  }
+
   spoofActionUnit(val) {
     document.getElementById('action-unit-' + val).classList.add('action-unit-' + val + '-border');
     setTimeout(function() {
@@ -225,50 +267,77 @@ class App extends Component {
     let shovedHRChart = this.state.shovedHRChart ? 'chart-wrap heart-rate-chart-wrap' : 'chart-wrap heart-rate-chart-wrap chart-hidden';
     let shovedHRChartContain = this.state.shovedHRChart ? 'chart-contain heart-rate-chart-contain' : 'chart-contain heart-rate-chart-contain chart-contain-hidden';
 
+    let displaySpoofMenu = this.state.displaySpoofMenu ? 'spoof-menu' : 'spoof-menu spoof-menu-hidden';
+
     let actionUnitsWrapClass = this.state.actionUnitsWrapClass ? 'action-units-wrap action-units-wrap-visible' : 'action-units-wrap';
     return (
       <div className="App">
       {/*<button onClick={this.connectToFaceReader}>Connect to Facereader</button>
       <button onClick={this.spoofBorder}>Spoof border</button>
       <input type="range" value={this.state.spoofValue} min="0" max="255" onChange={this.changeSpoof} />*/}
-      <button onClick={this.spoofGSR}>Spoof GSR</button>
-      <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
-      <button onClick={this.sendActionUnitsWrapReq}>Display action units</button>
-      <button onClick={this.spoof4}>Spoof 4</button>
-      <button onClick={this.spoof23}>Spoof 23</button>
-      <button onClick={this.spoof24}>Spoof 24</button>
-        <div className="jitsi-window">
-          <div style={this.state.borderStyle} className={resizedWindow}>
-            <JitsiContainer />
-            <div className="change-size-wrap">
-              <span onClick={this.toggleWindowSize} className="change-size-btn"><FontAwesomeIcon icon={faChevronUp} /></span>
+      <Router basename={'/biocall'}>
+        <Switch>
+          <Route path="/full-view">
+            <div className={displaySpoofMenu}>
+              <button onClick={this.spoofGSR}>Spoof GSR</button>
+              <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
+              <button onClick={this.sendActionUnitsWrapReq}>Display action units</button>
+              <button onClick={this.spoof4}>Spoof 4</button>
+              <button onClick={this.spoof23}>Spoof 23</button>
+              <button onClick={this.spoof24}>Spoof 24</button>
             </div>
-          </div>
+            <div className="jitsi-window">
+              <div style={this.state.borderStyle} className={resizedWindow}>
+                <JitsiContainer />
+                <div className="change-size-wrap">
+                  <span onClick={this.toggleWindowSize} className="change-size-btn"><FontAwesomeIcon icon={faChevronUp} /></span>
+                </div>
+              </div>
 
-          <div className={actionUnitsWrapClass}>
-            <div className="all-action-units">
-              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
-              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
-              <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
-            </div>
-          </div>
+              <div className={actionUnitsWrapClass}>
+                <div className="all-action-units">
+                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
+                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
+                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
+                </div>
+              </div>
 
-          <div className={resizedWindowCharts}>
-            <div className={shovedStressChartContain}>
-              <div className={shovedStressChart}>
-                <StressLevelChart bioData={this.state.bioData}/>
-                <div className="chart-toggle-button" onClick={this.toggleShovedStressChart}>Stress level</div>
+              <div className={resizedWindowCharts}>
+                <div className={shovedStressChartContain}>
+                  <div className={shovedStressChart}>
+                    <StressLevelChart bioData={this.state.bioData}/>
+                    <div className="chart-toggle-button" onClick={this.toggleShovedStressChart}>Stress level</div>
+                  </div>
+                </div>
+
+                <div className={shovedHRChartContain}>
+                  <div className={shovedHRChart}>
+                    <HeartRateChart bioData={this.state.bioData} />
+                    <div className="chart-toggle-button" onClick={this.toggleShovedHRChart}>Heart rate</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bottom-wrap">
+                <div className="bottom-wrap-part bottom-left">
+                  <div className="toggles-title">Show elements to client</div>
+                  <div className="toggles-wrap">
+                    <div className="toggles-text"><label className="toggle-label"><input type="checkbox" onChange={this.showToClientBorder} /><span className="toggle toggle-round"></span></label><span className="toggles-desc">Show border to client</span></div>
+                    <div className="toggles-text"><label className="toggle-label"><input type="checkbox" onChange={this.showToClientStress} /><span className="toggle toggle-round"></span></label><span className="toggles-desc">Show stress level to client</span></div>
+                    <div className="toggles-text"><label className="toggle-label"><input type="checkbox" onChange={this.showToClientHR} /><span className="toggle toggle-round"></span></label><span className="toggles-desc">Show heart rate to client</span></div>
+                  </div>
+                </div>
+                <div className="bottom-wrap-part bottom-right">
+                E
+                </div>
               </div>
             </div>
-
-            <div className={shovedHRChartContain}>
-              <div className={shovedHRChart}>
-                <HeartRateChart bioData={this.state.bioData} />
-                <div className="chart-toggle-button" onClick={this.toggleShovedHRChart}>Heart rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </Route>
+          <Route path="/client-view">
+            <ClientView bioData={this.state.bioData} borderStyle={this.state.borderStyle} showToClientBorder={this.state.showToClientBorder} showToClientStressChart={this.state.showToClientStressChart} showToClientHRChart={this.state.showToClientHRChart} />
+          </Route>
+        </Switch>
+      </Router>
       </div>
     );
   }

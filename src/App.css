@@ -7,8 +7,29 @@
   background: #f3f2f7;
 }
 
-.App button, .App input {
-  /* display: none; */
+.spoof-menu {
+  width: 200px;
+  position: fixed;
+  z-index: 10;
+  right: 50px;
+  top: 50px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 0 5px 5px 5px;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.spoof-menu button, .spoof-menu input {
+  display: block;
+  width: 100%;
+}
+
+.spoof-menu-hidden {
+  display: none;
+}
+
+.hide-el {
+  visibility: hidden;
 }
 
 .jitsi-window {
@@ -31,6 +52,7 @@
   transition: 0.3s;
   transform-origin: top right;
   transition-timing-function: cubic-bezier(0,.6,0,.99);
+  z-index: 5;
 }
 
 .jitsi-resized {
@@ -69,4 +91,113 @@
 
 .jitsi-resized .change-size-btn svg {
   transform: rotateZ(-135deg);
+}
+
+.bottom-wrap {
+  position: absolute;
+  top: 60%;
+  width: calc(100% - 100px);
+  height: calc(40% - 50px);
+  z-index: 1;
+  display: flex;
+}
+
+.bottom-wrap-part {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px 0px rgba(122,122,122,0.25);
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.bottom-left {
+  width: calc(40% - 20px);
+  margin-right: 20px;
+  height: 100%;
+  flex-grow: 4;
+  font-family: 'Segoe UI', 'Helvetica', 'Roboto';
+}
+
+.bottom-right {
+  width: 60%;
+  height: 100%;
+  flex-grow: 6;
+}
+
+.toggles-title {
+  text-align: center;
+  font-size: 24px;
+  height: 30px;
+}
+.toggles-wrap {
+  height: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.toggles-text {
+  width: 250px;
+  margin-left: calc(50% - 125px);
+}
+
+.toggles-text .toggles-desc {
+  margin-left: 20px;
+  line-height: 26px;
+}
+
+.toggle-label {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.toggle-label input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.toggle:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .toggle {
+  background-color: #2196F3;
+}
+
+input:focus + .toggle {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .toggle:before {
+  transform: translateX(16px);
+}
+
+.toggle.toggle-round {
+  border-radius: 34px;
+}
+
+.toggle.toggle-round:before {
+  border-radius: 50%;
 }

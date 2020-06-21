@@ -63,7 +63,7 @@ class HeartRateChart extends React.Component {
       let maxChartVal = bioData.faceReaderHRHistory.maxVal+5;
       this.hrChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       this.hrChart.data.datasets[0].data.push(bioData.faceReader['Heart Rate']);
-      console.log(bioData.faceReader['Heart Rate']);
+      //console.log(bioData.faceReader['Heart Rate']);
       this.hrChart.data.labels.push('');
       if (this.hrChart.data.datasets[0].data.length > 100) {
         this.hrChart.data.datasets[0].data.shift();
