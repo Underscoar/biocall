@@ -1,9 +1,4 @@
 .action-units-wrap {
-  position: absolute;
-  width: 450px;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 50px;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -15,17 +10,13 @@
   display: none;
 }
 
-.action-units-wrap-visible {
-  display: flex;
-}
-
 .all-action-units {
   display: flex;
   border-bottom: 2px solid #919191;
   height: 35px;
 }
 
-.ActionUnit {
+.action-units-wrap .ActionUnit {
   width: 120px;
   color: #919191;
   font-size: 10px;
@@ -82,4 +73,46 @@
 @keyframes actionUnit24 {
   from {background: rgba(149, 45, 187, 0.5);}
   to {background: rgba(255,255,255,0.5);}
+}
+
+.action-units-contain {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  align-items: center;
+  font-family: 'Segoe UI', 'Helvetica', 'Roboto';
+}
+
+.action-units-contain .ActionUnit {
+  flex-grow: 1;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.action-units-contain .ActionUnit span {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.action-units-contain .ActionUnit:nth-child(2) span {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.action-units-contain .action-unit-4-wall {
+  background: rgba(150,255,150,0.5);
+}
+
+.action-units-contain .action-unit-23-wall {
+  background: rgba(150,186,255,0.5);
+}
+
+.action-units-contain .action-unit-24-wall {
+  background: rgba(150,45,178,0.5);
 }

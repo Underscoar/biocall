@@ -22,8 +22,9 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      // endpoint: "https://ad0f3d9c6160.eu.ngrok.io",
-      endpoint: "http://192.168.0.166:4001",
+      endpoint: "https://39d1fc4a6119.eu.ngrok.io",
+      // endpoint: "http://192.168.0.166:4001",
+      // endpoint: "http://127.0.0.1:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
         "Heart Rate Var": 0.180,
@@ -251,10 +252,15 @@ class App extends Component {
   }
 
   spoofActionUnit(val) {
-    document.getElementById('action-unit-' + val).classList.add('action-unit-' + val + '-border');
-    setTimeout(function() {
-      document.getElementById('action-unit-' + val).classList.remove('action-unit-' + val + '-border');
-    },1000);
+    try {
+      document.getElementById('action-unit-' + val).classList.add('action-unit-' + val + '-wall');
+      setTimeout(function() {
+        document.getElementById('action-unit-' + val).classList.remove('action-unit-' + val + '-wall');
+      },1000);
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -268,16 +274,14 @@ class App extends Component {
     let shovedHRChartContain = this.state.shovedHRChart ? 'chart-contain heart-rate-chart-contain' : 'chart-contain heart-rate-chart-contain chart-contain-hidden';
 
     let displaySpoofMenu = this.state.displaySpoofMenu ? 'spoof-menu' : 'spoof-menu spoof-menu-hidden';
-
-    let actionUnitsWrapClass = this.state.actionUnitsWrapClass ? 'action-units-wrap action-units-wrap-visible' : 'action-units-wrap';
     return (
       <div className="App">
       {/*<button onClick={this.connectToFaceReader}>Connect to Facereader</button>
       <button onClick={this.spoofBorder}>Spoof border</button>
       <input type="range" value={this.state.spoofValue} min="0" max="255" onChange={this.changeSpoof} />*/}
-      <Router basename={'/biocall'}>
+      {/*<Router basename={'/biocall'}>
         <Switch>
-          <Route path="/full-view">
+          <Route path="/full-view">*/}
             <div className={displaySpoofMenu}>
               <button onClick={this.spoofGSR}>Spoof GSR</button>
               <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
@@ -291,14 +295,6 @@ class App extends Component {
                 <JitsiContainer />
                 <div className="change-size-wrap">
                   <span onClick={this.toggleWindowSize} className="change-size-btn"><FontAwesomeIcon icon={faChevronUp} /></span>
-                </div>
-              </div>
-
-              <div className={actionUnitsWrapClass}>
-                <div className="all-action-units">
-                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
-                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
-                  <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
                 </div>
               </div>
 
@@ -328,16 +324,28 @@ class App extends Component {
                   </div>
                 </div>
                 <div className="bottom-wrap-part bottom-right">
-                E
+                {/*  <div className="action-units-wrap">
+                    <div className="all-action-units">
+                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
+                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
+                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
+                    </div>
+                  </div> */}
+
+                  <div className="action-units-contain">
+                    <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
+                    <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
+                    <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
+                  </div>
                 </div>
               </div>
             </div>
-          </Route>
+          {/*</Route>
           <Route path="/client-view">
             <ClientView bioData={this.state.bioData} borderStyle={this.state.borderStyle} showToClientBorder={this.state.showToClientBorder} showToClientStressChart={this.state.showToClientStressChart} showToClientHRChart={this.state.showToClientHRChart} />
           </Route>
         </Switch>
-      </Router>
+      </Router>*/}
       </div>
     );
   }

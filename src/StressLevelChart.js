@@ -25,7 +25,9 @@ class StressLevelChart extends React.Component {
           backgroundColor: gradient,
 					borderColor: 'rgba(116,0,255,1)',
 					data: this.gsrData,
-          radius: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          radius: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+          pointBackgroundColor: ['rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0)'],
+          pointBorderWidth: 0
 				}]
 			},
 			options: {
@@ -66,12 +68,36 @@ class StressLevelChart extends React.Component {
       this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       // this.stressChart.data.datasets[0].data.push(Math.floor(Math.random() * 6));
       this.stressChart.data.datasets[0].data.push(bioData.gsr);
+
+
+      if (bioData.faceReader['Action Unit 04 - Brow Lowerer'] !== 'NotActive') {
+        this.stressChart.data.datasets[0].radius.push(5);
+        this.stressChart.data.datasets[0].pointBackgroundColor.push('rgba(150,255,150,1)');
+      }
+
+      else if (bioData.faceReader['Action Unit 23 - Lip Tightener'] !== 'NotActive') {
+        this.stressChart.data.datasets[0].radius.push(5);
+        this.stressChart.data.datasets[0].pointBackgroundColor.push('rgba(150,186,255,1)');
+      }
+
+      else if (bioData.faceReader['Action Unit 24 - Lip Pressor'] !== 'NotActive') {
+        this.stressChart.data.datasets[0].radius.push(5);
+        this.stressChart.data.datasets[0].pointBackgroundColor.push('rgba(150,45,178,1)');
+      }
+
+      else {
         this.stressChart.data.datasets[0].radius.push(0);
+        this.stressChart.data.datasets[0].pointBackgroundColor.push('rgba(0,0,0,0)');
+      }
+
+
+
       this.stressChart.data.labels.push('');
       if (this.stressChart.data.datasets[0].data.length > 100) {
         this.stressChart.data.datasets[0].data.shift();
         this.stressChart.data.labels.shift();
         this.stressChart.data.datasets[0].radius.shift();
+        this.stressChart.data.datasets[0].pointBackgroundColor.shift();
       }
       this.stressChart.update();
       // console.log(this.stressChart.data.datasets[0].data);
