@@ -128,21 +128,19 @@ class App extends Component {
   processBioData(data) {
     this.setState({bioData: data});
     console.log(data);
-    this.processESenseDate(data.gsr);
+    this.processESenseDate(data.gsr, data.gsrHistory);
   }
 
-  processESenseDate(data) {
+  processESenseDate(data, gsrHistory) {
     const bioSource = '/GSR';
     const bioValue = parseFloat(data);
     if (this.state.spoofBorder === false) {
       if (bioSource === '/GSR') {
-        //console.log(data);
-        // Set the border color based on the Skin Response Value
         if (bioValue <= 1) {this.setState({borderStyle: {boxShadow: '0 0 50px 5px rgba(0, 0, 255, 0.75)'}});}
-        else if (bioValue >= 5) {this.setState({borderStyle: {boxShadow: '0 0 50px 5px rgba(255, 0, 0, 0.75)'}});}
+        else if (bioValue >= gsrHistory['maxVal']) {this.setState({borderStyle: {boxShadow: '0 0 50px 5px rgba(255, 0, 0, 0.75)'}});}
         else {
-          let percOfThreeVal = bioValue/3;
-          let redVal = Math.floor(255*percOfThreeVal);
+          let percOfMaxVal = bioValue/gsrHistory['maxVal'];
+          let redVal = Math.floor(255*percOfMaxVal);
           let blueVal = 255-redVal;
           this.setState({borderStyle: {boxShadow: `0 0 50px 5px rgba(${redVal}, 0, ${blueVal}, 0.75)`}});
         }

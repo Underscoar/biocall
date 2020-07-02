@@ -6,11 +6,9 @@ var Chart = require('chart.js');
 class StressLevelChart extends React.Component {
   componentDidMount(props) {
     this.ctx = document.getElementById('stress-level-chart').getContext('2d');
-    // let gradient = 'rgba(116,0,255,0.2)';
     let gradient = this.ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(116,0,255,0.8)');
     gradient.addColorStop(1, 'rgba(116,0,255,0)');
-    // console.log(this.ctx);
     this.gsrData = [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1];
     this.config = {
       type: 'line',
@@ -19,9 +17,6 @@ class StressLevelChart extends React.Component {
 				datasets: [{
 					label: 'Stress level',
 					fill: true,
-					// backgroundColor: 'rgba(255,0,0,0.2)',
-					// borderColor: 'rgba(255,0,0,1)',
-          // backgroundColor: 'rgba(116,0,255,0.2)',
           backgroundColor: gradient,
 					borderColor: 'rgba(116,0,255,1)',
 					data: this.gsrData,
@@ -64,9 +59,8 @@ class StressLevelChart extends React.Component {
 
   updateChart(bioData) {
     if (this.stressChart !== undefined) {
-      // let maxChartVal = bioData.gsrHistory.maxVal+0.5;
-      // this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
-      // this.stressChart.data.datasets[0].data.push(Math.floor(Math.random() * 6));
+      let maxChartVal = bioData.gsrHistory.maxVal+0.5;
+      this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       this.stressChart.data.datasets[0].data.push(bioData.gsr);
 
 
@@ -100,7 +94,6 @@ class StressLevelChart extends React.Component {
         this.stressChart.data.datasets[0].pointBackgroundColor.shift();
       }
       this.stressChart.update();
-      // console.log(this.stressChart.data.datasets[0].data);
     }
   }
 

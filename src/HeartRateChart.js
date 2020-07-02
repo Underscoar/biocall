@@ -6,7 +6,6 @@ var Chart = require('chart.js');
 class HeartRateChart extends React.Component {
   componentDidMount(props) {
     this.ctx = document.getElementById('heart-rate-chart').getContext('2d');
-    //console.log(this.ctx);
     let gradient = this.ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(255,0,0,0.8)');
     gradient.addColorStop(1, 'rgba(255,0,0,0)');
@@ -18,9 +17,6 @@ class HeartRateChart extends React.Component {
 				datasets: [{
 					label: 'Heart rate',
 					fill: true,
-					// backgroundColor: 'rgba(255,0,0,0.2)',
-					// borderColor: 'rgba(255,0,0,1)',
-          // backgroundColor: 'rgba(255,0,0,0.2)',
           backgroundColor: gradient,
 					borderColor: 'rgba(255,0,0,1)',
 					data: this.gsrData,
@@ -60,17 +56,15 @@ class HeartRateChart extends React.Component {
 
   updateChart(bioData) {
     if (this.hrChart !== undefined) {
-      // let maxChartVal = bioData.faceReaderHRHistory.maxVal+5;
-      // this.hrChart.options.scales.yAxes[0].ticks.max = maxChartVal;
+      let maxChartVal = bioData.faceReaderHRHistory.maxVal+5;
+      this.hrChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       this.hrChart.data.datasets[0].data.push(bioData.faceReader['Heart Rate']);
-      //console.log(bioData.faceReader['Heart Rate']);
       this.hrChart.data.labels.push('');
       if (this.hrChart.data.datasets[0].data.length > 100) {
         this.hrChart.data.datasets[0].data.shift();
         this.hrChart.data.labels.shift();
       }
       this.hrChart.update();
-      //console.log(this.hrChart.data.datasets[0].data);
     }
   }
 
