@@ -1,12 +1,16 @@
 import React from 'react';
 import Iframe from 'react-iframe';
 import './JitsiContainer.css';
+import {
+  useParams
+} from "react-router-dom";
 
 function JitsiContainer() {
+  let { slug } = useParams();
+  let jitsiMeetUrl = 'https://i342465.hera.fhict.nl/jitsi-meet-link-placeholder/index.html?room=' + slug;
   return (
     <div className="JitsiContainer">
-    <Iframe url="https://i342465.hera.fhict.nl/jitsi-meet-link"
-    // <Iframe url="https://i342465.hera.fhict.nl/jitsi-meet-link-placeholder"
+    <Iframe url={jitsiMeetUrl}
               className="jitsi-iframe-wrap"
               allow="camera; microphone" />
     </div>

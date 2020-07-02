@@ -22,9 +22,9 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "https://454f763a791d.eu.ngrok.io",
+      // endpoint: "https://454f763a791d.eu.ngrok.io",
       // endpoint: "http://192.168.0.166:4001",
-      // endpoint: "http://127.0.0.1:4001",
+      endpoint: "http://127.0.0.1:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
         "Heart Rate Var": 0.180,
@@ -86,8 +86,13 @@ class App extends Component {
     const { endpoint } = this.state;
     this.socket = socketIOClient(endpoint);
 
-    //TODO User has to select/input room somewhere
     let room = 'BioCallTest';
+    let urlParams = window.location.pathname.split('/');
+    for (let i=0; i<urlParams.length; i++) {
+      if (urlParams[i] === 'full-view') {
+        room = urlParams[i+1];
+      }
+    }
 
     this.socket.on('connect', () => {
         this.socket.emit('roomRequest', room);
@@ -281,9 +286,9 @@ class App extends Component {
       {/*<button onClick={this.connectToFaceReader}>Connect to Facereader</button>
       <button onClick={this.spoofBorder}>Spoof border</button>
       <input type="range" value={this.state.spoofValue} min="0" max="255" onChange={this.changeSpoof} />*/}
-      {/*<Router basename={'/biocall'}>
+      <Router basename={'/biocall'}>
         <Switch>
-          <Route path="/full-view">*/}
+          <Route path="/full-view/:slug">
             <div className={displaySpoofMenu}>
               <button onClick={this.spoofGSR}>Spoof GSR</button>
               <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
@@ -342,12 +347,12 @@ class App extends Component {
                 </div>
               </div>
             </div>
-          {/*</Route>
-          <Route path="/client-view">
+          </Route>
+          <Route path="/client-view/:slug">
             <ClientView bioData={this.state.bioData} borderStyle={this.state.borderStyle} showToClientBorder={this.state.showToClientBorder} showToClientStressChart={this.state.showToClientStressChart} showToClientHRChart={this.state.showToClientHRChart} />
           </Route>
         </Switch>
-      </Router>*/}
+      </Router>
       </div>
     );
   }
