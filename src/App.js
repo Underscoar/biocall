@@ -22,7 +22,7 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "https://39d1fc4a6119.eu.ngrok.io",
+      endpoint: "https://454f763a791d.eu.ngrok.io",
       // endpoint: "http://192.168.0.166:4001",
       // endpoint: "http://127.0.0.1:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
@@ -87,7 +87,7 @@ class App extends Component {
     this.socket = socketIOClient(endpoint);
 
     //TODO User has to select/input room somewhere
-    let room = 'Kamer';
+    let room = 'BioCallTest';
 
     this.socket.on('connect', () => {
         this.socket.emit('roomRequest', room);
@@ -196,9 +196,11 @@ class App extends Component {
   spoofGSR() {
     if (this.state.spoofGSR === false) {
       this.socket.emit('spoofGSR', true);
+      this.setState({spoofGSR: true});
     }
     else {
       this.socket.emit('spoofGSR', false);
+      this.setState({spoofGSR: false});
     }
   }
 
@@ -285,7 +287,7 @@ class App extends Component {
             <div className={displaySpoofMenu}>
               <button onClick={this.spoofGSR}>Spoof GSR</button>
               <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
-              <button onClick={this.sendActionUnitsWrapReq}>Display action units</button>
+              {/*<button onClick={this.sendActionUnitsWrapReq}>Display action units</button>*/}
               <button onClick={this.spoof4}>Spoof 4</button>
               <button onClick={this.spoof23}>Spoof 23</button>
               <button onClick={this.spoof24}>Spoof 24</button>

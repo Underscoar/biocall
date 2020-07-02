@@ -48,7 +48,7 @@ class HeartRateChart extends React.Component {
 						display: true,
             ticks: {
               min: 40,
-              max: 120
+              max: 100
             }
 					}]
 				}

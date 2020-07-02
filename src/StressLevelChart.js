@@ -64,8 +64,8 @@ class StressLevelChart extends React.Component {
 
   updateChart(bioData) {
     if (this.stressChart !== undefined) {
-      let maxChartVal = bioData.gsrHistory.maxVal+0.5;
-      this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
+      // let maxChartVal = bioData.gsrHistory.maxVal+0.5;
+      // this.stressChart.options.scales.yAxes[0].ticks.max = maxChartVal;
       // this.stressChart.data.datasets[0].data.push(Math.floor(Math.random() * 6));
       this.stressChart.data.datasets[0].data.push(bioData.gsr);
 
