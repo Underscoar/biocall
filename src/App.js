@@ -89,7 +89,7 @@ class App extends Component {
     let room = 'BioCallTest';
     let urlParams = window.location.pathname.split('/');
     for (let i=0; i<urlParams.length; i++) {
-      if (urlParams[i] === 'full-view') {
+      if (urlParams[i].endsWith('-view')) {
         room = urlParams[i+1];
       }
     }
