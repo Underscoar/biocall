@@ -7,7 +7,7 @@ import {
 
 function JitsiContainer() {
   let { slug } = useParams();
-  let jitsiMeetUrl = 'https://i342465.hera.fhict.nl/jitsi-meet-link-placeholder/index.html?room=' + slug;
+  let jitsiMeetUrl = 'https://i342465.hera.fhict.nl/jitsi-meet-link/index.html?room=' + slug;
   return (
     <div className="JitsiContainer">
     <Iframe url={jitsiMeetUrl}
