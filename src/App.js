@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 import './App.css';
 
-// import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -22,8 +21,7 @@ class App extends Component {
     super();
     this.state = {
       response: false,
-      // endpoint: "https://454f763a791d.eu.ngrok.io",
-      // endpoint: "http://192.168.0.166:4001",
+      // Endpoint points to BioCall server. In this case localhost. For tunneling, NGROK is an option
       endpoint: "http://127.0.0.1:4001",
       bioData: {gsr: '1.2', gsrHistory: {minVal:0, maxVal:1}, faceReaderHRHistory: {minVal:0, maxVal:60}, faceReaderHRVHistory: {minVal:0, maxVal:0.200}, faceReader: {
         "Heart Rate": 60,
@@ -40,7 +38,6 @@ class App extends Component {
         "Action Unit 24 - Lip Pressor": "NotActive"
       }},
       borderStyle: {
-        // boxShadow: `0 0 20px 5px rgba(90, 255, 52, 0.75)`
         boxShadow: `0 0 40px 5px rgba(0, 0, 255, 0.75)`
       },
       showToClientBorder: false,
@@ -57,10 +54,10 @@ class App extends Component {
       actionUnitsWrapClass: false
     }
 
+    // Binding all functions to use '.this' in all functions.
+
     this.processBioData = this.processBioData.bind(this);
-    this.connectToFaceReader = this.connectToFaceReader.bind(this);
     this.spoofBorder = this.spoofBorder.bind(this);
-    this.changeSpoof = this.changeSpoof.bind(this);
     this.toggleWindowSize = this.toggleWindowSize.bind(this);
     this.toggleShovedStressChart = this.toggleShovedStressChart.bind(this);
     this.toggleShovedHRChart = this.toggleShovedHRChart.bind(this);
@@ -98,6 +95,7 @@ class App extends Component {
         this.socket.emit('roomRequest', room);
       });
 
+    // Press CTRL + Q in the application for a small window with spoofing options
     document.addEventListener('keydown', (event) => {
       if (event.ctrlKey && event.key === 'q') {
         if (!this.state.displaySpoofMenu) {
@@ -117,7 +115,6 @@ class App extends Component {
     this.socket.on("faceReaderData", data => this.processFaceReaderData(data));
 
     this.socket.on('spoofActionUnit', data => this.spoofActionUnit(data));
-    this.socket.on('testdata', data => {console.log(data);});
     this.socket.on('setActionUnitsWrap', data =>{this.setState({actionUnitsWrapClass: data});});
 
     this.socket.on('showToClientBorder', data => {this.setState({showToClientBorder: data});});
@@ -127,7 +124,6 @@ class App extends Component {
 
   processBioData(data) {
     this.setState({bioData: data});
-    console.log(data);
     this.processESenseDate(data.gsr, data.gsrHistory);
   }
 
@@ -161,9 +157,7 @@ class App extends Component {
   }
 
   processFaceReaderData(data) {
-    //console.log(data);
     let heartRate = data['Heart Rate'];
-    //console.log(heartRate);
     if (heartRate !== "Unknown") {
       if (heartRate <= 50) {this.setState({borderStyle: {boxShadow: '0 0 50px 5px rgba(0, 0, 255, 0.75)'}});}
       else if (heartRate >= 100) {this.setState({borderStyle: {boxShadow: '0 0 50px 5px rgba(255, 0, 0, 0.75)'}});}
@@ -176,12 +170,6 @@ class App extends Component {
     }
   }
 
-  connectToFaceReader() {
-    this.socket.emit('connectFaceReader', 'ClientIdOfzo');
-    // this.socket.on('ClientIdOfzo', data => console.log(data))
-    // console.log('Emitted: "connectFaceReader" with data: "ClientIdOfzo"');
-  }
-
   spoofBorder() {
     if (this.state.spoofBorder === false) {
       this.socket.emit('spoofBorder', true);
@@ -189,11 +177,6 @@ class App extends Component {
     else {
       this.socket.emit('spoofBorder', false);
     }
-  }
-
-  changeSpoof(event) {
-    console.log(event.target.value);
-    this.socket.emit('spoofValue', event.target.value);
   }
 
   spoofGSR() {
@@ -281,16 +264,12 @@ class App extends Component {
     let displaySpoofMenu = this.state.displaySpoofMenu ? 'spoof-menu' : 'spoof-menu spoof-menu-hidden';
     return (
       <div className="App">
-      {/*<button onClick={this.connectToFaceReader}>Connect to Facereader</button>
-      <button onClick={this.spoofBorder}>Spoof border</button>
-      <input type="range" value={this.state.spoofValue} min="0" max="255" onChange={this.changeSpoof} />*/}
       <Router basename={'/biocall'}>
         <Switch>
           <Route path="/full-view/:slug">
             <div className={displaySpoofMenu}>
               <button onClick={this.spoofGSR}>Spoof GSR</button>
               <input type="range" value={this.state.spoofedGSRVal} min="0" max="5" step="0.1" onChange={this.changeGSR} />
-              {/*<button onClick={this.sendActionUnitsWrapReq}>Display action units</button>*/}
               <button onClick={this.spoof4}>Spoof 4</button>
               <button onClick={this.spoof23}>Spoof 23</button>
               <button onClick={this.spoof24}>Spoof 24</button>
@@ -329,14 +308,6 @@ class App extends Component {
                   </div>
                 </div>
                 <div className="bottom-wrap-part bottom-right">
-                {/*  <div className="action-units-wrap">
-                    <div className="all-action-units">
-                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
-                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
-                      <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 24 - Lip Pressor']} actionName="Lip Pressor" actionClass="action-unit-24" />
-                    </div>
-                  </div> */}
-
                   <div className="action-units-contain">
                     <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 04 - Brow Lowerer']} actionName="Brow Lowerer" actionClass="action-unit-4" />
                     <ActionUnit actionUnit={this.state.bioData.faceReader['Action Unit 23 - Lip Tightener']} actionName="Lip Tightener" actionClass="action-unit-23" />
